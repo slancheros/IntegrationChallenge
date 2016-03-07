@@ -14,6 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class BadRequestStrategy extends AbstractResponseTypeStrategy {
 
+	public BadRequestStrategy(){
+		super();
+	}
    public BadRequestStrategy(String status, String message) {
       super(status, message);
    }
@@ -28,10 +31,5 @@ public class BadRequestStrategy extends AbstractResponseTypeStrategy {
       return result;
    }
 
-   @Override
-   public boolean isImplementable() {
-      String fline = StringUtils.substringBefore(getMessage(), "\n");
-      return (fline.contains("xpath=null") && fline.contains("java.lang.NullPointerException"));
-   }
 
 }

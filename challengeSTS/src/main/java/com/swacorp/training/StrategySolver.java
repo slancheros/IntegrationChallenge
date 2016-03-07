@@ -10,38 +10,47 @@
  */
 package com.swacorp.training;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.support.GenericXmlApplicationContext;
 
 public class StrategySolver {
 
-   private List<ResponseStrategy> strategies;
+	public static StrategyResult messageDecode(String status, String message) {
 
-   public StrategySolver(String status, String message) {
-      strategies = new ArrayList<ResponseStrategy>();
-      initializeStrategies(status, message);
-   }
+		GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext();
+		appCtx.load("classpath:xml-bean-factory-config.xml");
+		appCtx.refresh();
 
-   public StrategyResult messageDecode() {
+		if (isComplete(status, message)) {
+			return appCtx.getBean("complete", ResponseStrategy.class).decode();
+		} else if (isBunisess(status, message)) {
+			return appCtx.getBean("bunisess", ResponseStrategy.class).decode();
+		} else if (isBadRequest(status, message)) {
+			return appCtx.getBean("badRequest", ResponseStrategy.class).decode();
+		} else if (isServerError(status, message)) {
+			return appCtx.getBean("serverError", ResponseStrategy.class).decode();
+		}
+		return null;
 
-      for (ResponseStrategy strategy : strategies) {
-         if (strategy.isImplementable()) { return strategy.decode(); }
-      }
+	}
 
-      return null;
+	private static boolean isServerError(String status, String message) {
+		String fline = StringUtils.substringBefore(message, "\n");
+		return StringUtils.substringAfterLast(fline, ":").trim().equals(Constants.ERROR_NOT_MESSAGE)
+				|| fline.trim().equals(Constants.ERROR_NOT_MESSAGE) || status.equals(Constants.SERVER_ERROR);
+	}
 
-   }
+	private static boolean isBadRequest(String status, String message) {
+		String fline = StringUtils.substringBefore(message, "\n");
+		return (fline.contains("xpath=null") && fline.contains("java.lang.NullPointerException"));
+	}
 
-   private void initializeStrategies(String status, String message) {
-      ResponseStrategy complete = new CompleteStrategy(status, message);
-      ResponseStrategy bunisess = new BunisessExceptionStrategy(status, message);
-      ResponseStrategy badRequest = new BadRequestStrategy(status, message);
-      ResponseStrategy serverError = new ServerErrorStrategy(status, message);
-      strategies.add(complete);
-      strategies.add(bunisess);
-      strategies.add(badRequest);
-      strategies.add(serverError);
+	private static boolean isBunisess(String status, String message) {
+		return StringUtils.substringBefore(message, "\n").contains("Errors");
+	}
 
-   }
+	private static boolean isComplete(String status, String message) {
+		return status.equals("COMPLETE");
+	}
 
 }

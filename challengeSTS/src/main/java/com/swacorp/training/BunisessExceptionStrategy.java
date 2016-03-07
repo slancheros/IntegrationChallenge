@@ -14,6 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class BunisessExceptionStrategy extends AbstractResponseTypeStrategy {
 
+	public BunisessExceptionStrategy(){
+		super();
+	}
    public BunisessExceptionStrategy(String status, String message) {
       super(status, message);
    }
@@ -36,9 +39,5 @@ public class BunisessExceptionStrategy extends AbstractResponseTypeStrategy {
       return result;
    }
 
-   @Override
-   public boolean isImplementable() {
-      return StringUtils.substringBefore(getMessage(), "\n").contains("Errors");
-   }
 
 }

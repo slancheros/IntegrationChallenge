@@ -10,25 +10,23 @@
  */
 package com.swacorp.training;
 
-
 public class CompleteStrategy extends AbstractResponseTypeStrategy {
 
-   public CompleteStrategy(String status, String message) {
-      super(status, message);
-   }
+	public CompleteStrategy() {
+		super();
+	}
 
-   @Override
-   public StrategyResult decode() {
-      StrategyResult result = new StrategyResult();
-      result.setResponseDescription("");
-      result.setResponseType("SUCCESSFUL");
+	public CompleteStrategy(String status, String message) {
+		super(status, message);
+	}
 
-      return result;
-   }
+	@Override
+	public StrategyResult decode() {
+		StrategyResult result = new StrategyResult();
+		result.setResponseDescription("");
+		result.setResponseType("SUCCESSFUL");
 
-   @Override
-   public boolean isImplementable() {
-      return getStatus().equals("COMPLETE");
-   }
+		return result;
+	}
 
 }

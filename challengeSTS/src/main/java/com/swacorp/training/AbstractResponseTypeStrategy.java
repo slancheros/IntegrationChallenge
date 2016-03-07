@@ -15,6 +15,9 @@ public abstract class AbstractResponseTypeStrategy implements ResponseStrategy {
    private String message;
    private String status;
 
+   public AbstractResponseTypeStrategy(){
+	   
+   }
    public AbstractResponseTypeStrategy(String status, String message) {
       this.message = message;
       this.status = status;

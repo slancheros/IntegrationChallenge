@@ -13,5 +13,4 @@ package com.swacorp.training;
 public interface ResponseStrategy {
    StrategyResult decode();
 
-   boolean isImplementable();
 }
