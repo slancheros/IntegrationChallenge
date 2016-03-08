@@ -1,0 +1,122 @@
+buildscript {
+	ext {
+		springBootVersion = '1.3.3.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot' 
+apply plugin: "jacoco"
+//code quality
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+
+jar {
+	baseName = 'challenge'
+	version = '0.0.1-SNAPSHOT'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	ext {
+      archRepoUrl = 'https://nexus-tools.swacorp.com/ARCH/content/groups/public'
+	  mxRepoUrl = 'https://nexus-tools.swacorp.com/MX/content/groups/public'
+   }
+   repositories {
+	  mavenLocal()
+      maven { url archRepoUrl }
+	 
+   }
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter')
+	testCompile('org.springframework.boot:spring-boot-starter-test') 
+}
+
+defaultTasks 'clean', 'build', 'jar'
+
+eclipse {
+	classpath {
+		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.9'
+}
+
+jacoco {
+    toolVersion = "0.7.1.201405082137"
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/reports/jacoco/html"
+    }
+}
+
+test {
+    jacoco {
+        append = false
+        destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        classDumpFile = file("$buildDir/jacoco/classpathdumps")
+    }
+}
+
+//code quality configuration
+//checkstyle
+checkstyle {
+   ignoreFailures = true
+   configFile rootProject.file("${rootDir}/config/code-quality/swa-checkstyle.xml")
+   //sourceSets = sourceSets { main { java { srcDirs } } }
+   checkstyleMain.source = "src/main/java"
+   checkstyleMain.exclude  '**/test/**'
+}
+
+//findbugs
+findbugs {
+   ignoreFailures = true
+   excludeFilter = new File("${rootDir}/config/code-quality/swa-findbugs.xml")
+   effort = "max"
+   reportLevel = "high"
+
+   sourceSets = sourceSets { main { java { srcDirs } } }
+   findbugsMain {
+      reports {
+        xml.enabled = false
+        html.enabled = true
+      }
+    }
+
+}
+
+//pmd
+pmd {
+   ignoreFailures = true
+   ruleSetFiles = files("${rootDir}/config/code-quality/swa-pmd.xml")
+
+   sourceSets = sourceSets { main { java { srcDirs } } }
+   pmdMain {
+     // exclude 'com/mxi/maintenix/mxcorews/services/requestws/**'
+   }
+   tasks.withType(Pmd) {
+     reports.xml.enabled = true
+	  reports.html.enabled = true
+   }
+}
+
