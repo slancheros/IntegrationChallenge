@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>dev1</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.dev1</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

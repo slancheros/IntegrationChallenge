@@ -1,0 +1,222 @@
+apply plugin: 'java'          
+description = 'com.swacorp.mx:zz-basic-project-template-it'
+def environmentName = System.getProperty('env') == null ?'cargo':System.getProperty('env')
+def healthCheckUrl = "not set yet"
+
+configurations {
+	generate
+	cargoruntime
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
+
+configurations.all {
+   resolutionStrategy {
+	  eachDependency { DependencyResolveDetails details ->
+		 if (details.requested.group == 'xml-apis') {
+			details.useVersion "1.4.01"
+		 }
+	  }
+   }
+}
+
+sourceSets {
+   main { 
+	   java { srcDirs generatedSrcDir } 
+	 }
+   test {
+	  
+		    output.resourcesDir = "build/classes/test"
+	  
+   }
+}
+
+buildscript {
+	repositories {
+		mavenLocal()
+		jcenter()
+		maven{
+			url "http://repositories.swacorp.com:9092/nexus/content/repositories/public"
+		}
+	  }
+   dependencies {
+      classpath 'com.bmuschko:gradle-cargo-plugin:2.0.3'
+	  classpath("net.serenity-bdd:serenity-gradle-plugin:1.1.1")
+	  classpath 'org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.0.2'
+	 
+   }
+}
+gradle.startParameter.continueOnFailure = true
+
+dependencies {
+   cargoruntime files("../service/build/libs/${rootProject.name}-service-${version}-${environmentName}.jar")
+ 
+   //wiremock	
+   compile "com.github.tomakehurst:wiremock:1.58"
+   compile "com.fasterxml.jackson.core:jackson-core:2.6.0",
+		   "com.fasterxml.jackson.core:jackson-annotations:2.6.0",
+		   "com.fasterxml.jackson.core:jackson-databind:2.6.0"
+   //log4j
+   compile "log4j:log4j:${log4jVersion}"
+  
+  //TBS
+   testRuntime "com.swacorp.tbs:tbs-status-core:${tbsVersion}"
+   testRuntime "com.swacorp.tbs:tbs-security-core:${tbsVersion}"
+   testRuntime ("com.swacorp.tbs:tbs-security-ws-server:${tbsVersion}") { exclude (module: 'commons-io') }
+   testRuntime "com.swacorp.tbs:tbs-security-ws-client:${tbsVersion}"
+   testRuntime "com.swacorp.tbs:tbs-web-utilities:${tbsVersion}"
+   
+   //TBS
+   runtime "com.swacorp.tbs:tbs-security-core:${tbsVersion}"
+   runtime "com.swacorp.tbs:tbs-security-ws-client:${tbsVersion}"
+   
+   testCompile group: 'org.springframework', name: 'spring-context', version:"${springVersion}"
+   testCompile group: 'org.springframework', name: 'spring-test', version:"${springVersion}"
+  
+   // PUT YOUR CONTRACT PROJECT HERE LIKE THIS->testRuntime "com.swacorp.mx:zz-basic-project-template-contract:${idmIntegrationVersion}"
+   // IF NEEDED PUT MXI CONTRACT PROJECT HERE LIKE THIS-> testRuntime "com.swacorp.mx.api.contract:mtx-api-contract:${serviceContractVersion}"
+
+   
+   testCompile group: 'junit', name: 'junit', version:'4.11'
+   testCompile "org.testng:testng:6.8.7"
+   testCompile  ('org.jbehave:jbehave-spring:3.9.5') {
+     exclude group: 'com.thoughtworks.xstream'
+   }
+   
+}
+
+
+////////////////////////////////////  PLUGINS  ///////////////////////////////////////////
+apply plugin: 'eclipse-wtp'
+eclipse {
+	classpath {
+	   downloadSources = true
+	   downloadJavadoc = false
+	}
+ }
+// END plugin configuration
+
+
+
+apply plugin: 'com.bmuschko.cargo'
+
+	def httpPort = '7080'
+	def cargoHome = "$buildDir/cargo"
+	def portFinder = org.gradle.util.AvailablePortFinder.createPrivate()
+	def rootContext = "${rootProject.name}-service"
+	
+	cargo {
+	   containerId = 'tomcat7x'
+	   port = httpPort.toInteger()
+	
+	   local {
+	      rmiPort = portFinder.nextAvailable
+	      homeDir = file(cargoHome)
+	      configHomeDir = file(cargoHome)
+		  
+	      installer {
+	         installUrl = 'http://repo1.maven.org/maven2/org/apache/tomcat/tomcat/7.0.63/tomcat-7.0.63.zip'
+	         downloadDir = file("$buildDir/download")
+	         extractDir = file("$buildDir/extract")
+	      }
+	      containerProperties { property 'cargo.tomcat.ajp.port', portFinder.nextAvailable }
+	      extraClasspath = configurations.cargoruntime
+	   }
+	
+	   deployable {
+	      file = file("../service/build/libs/${rootProject.name}-service-${version}.war")
+	      context = "$rootContext"
+	   }
+	}
+
+	
+	task createCargoHome() {
+		doLast {
+		   if (!file(cargoHome).exists() && !file(cargoHome).mkdirs()) {
+			  println "Failed to create directory '${cargoHome}'"
+		   }
+		  
+		}
+	 }
+ 
+	
+	/*task setHttpPortSystemProperty(type: Test) {
+		httpPort = portFinder.nextAvailable.toString()
+	 }*/
+ 
+	test {
+		doFirst{
+			//running jbehave build based
+			copy {
+				from "../service/build/environment/output/cargo"
+				into "/build/classes/test"
+			   }
+			   copy {
+				from "../service/build/environment/output/cargo"
+				into "${buildDir}/classes/test"
+			}
+		}
+		//since the port may change with each build execution, set the healthCheckUrl as a property so the test knows the URL
+		workingDir = System.getProperty("user.dir")
+		systemProperties = System.getProperties()
+		healthCheckUrl = "http://localhost:${httpPort}/${rootContext}/admin/healthcheck?pretty=true"
+		systemProperties['healthCheckUrl'] = healthCheckUrl
+		systemProperties['user.dir'] = workingDir
+		systemProperties['envFile'] = (environmentName == null || environmentName == 'local') ? 'activemq.xml' : 'tibcoems.xml'
+      
+      if (systemProperties['env'] == 'ci') {  //Use the mock security service url if env is 'ci' for integration test client (it module)
+         systemProperties['security.service.url'] = "http://localhost:5555/v3/SecurityService/security"
+      }
+
+		///////// END URL setup
+		
+		
+		doLast {
+			copy {
+				from "src/test/resources/jbehave-report-styles"
+				into "build/classes/build/jbehave/report/view"
+			   }
+		}
+	}
+	
+	task copyCargoConfiguration(type: Copy) {
+		//running jbehave eclipse based
+		copy {
+			from "../service/build/environment/output/cargo"
+			into "/bin"
+		   }
+		
+
+	}
+	task copyCargoConfigForBuild<< {
+			copy {
+				from "../service/build/environment/output/cargo"
+				into "${buildDir}/classes/test"
+			}
+		FileTree tree=fileTree(dir: '/build/classes/test')
+		tree.each {File file ->
+		println file
+		}
+	}
+   
+   task overrideSecurityUrl(type: com.bmuschko.gradle.cargo.tasks.local.CargoStartLocal) {
+      def javaSystemProperties = System.getProperties()
+      def securityServiceURL = null
+      if (environmentName == 'ci') {  //Use the mock security service url if env is 'ci' for Cargo (service module)
+         systemProperties = [
+            'security.service.url' : "http://localhost:5555/v3/SecurityService/security"
+         ]
+      }
+   }
+   
+	test.dependsOn cargoStartLocal
+	test.finalizedBy cargoStopLocal
+	cargoStartLocal.dependsOn(':zz-basic-project-template-service:war', createCargoHome)
+	
+	
+// END plugin configuration for cargo
+	
+
+	
+	

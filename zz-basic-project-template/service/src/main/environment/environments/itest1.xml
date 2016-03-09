@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>itest1</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.itest1</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

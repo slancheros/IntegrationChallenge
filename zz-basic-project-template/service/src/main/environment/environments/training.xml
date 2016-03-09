@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>training</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.training</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

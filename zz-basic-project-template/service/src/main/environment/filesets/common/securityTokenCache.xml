@@ -1,0 +1,19 @@
+<ehcache>
+   <defaultCache
+      maxElementsInMemory="100000"
+      eternal="false"
+      timeToLiveSeconds="900"
+      overflowToDisk="false"
+      memoryStoreEvictionPolicy="LRU"/>
+
+<!-- 
+     Setting the time to live to 4 hours (mandated by Security Team) and max tokens to 150.
+     Please tune the max elements that is right for your service (number of unique client instances + SWAG).
+ -->
+   <cache name="securityTokenCache"
+      maxElementsInMemory="150"
+      eternal="false"
+      timeToLiveSeconds="14400"
+      overflowToDisk="false"
+      memoryStoreEvictionPolicy="LRU"/>
+</ehcache>

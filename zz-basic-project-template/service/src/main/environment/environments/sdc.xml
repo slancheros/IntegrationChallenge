@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>sdc</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.sdc</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

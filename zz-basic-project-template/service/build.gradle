@@ -1,0 +1,208 @@
+import com.sun.org.apache.xpath.internal.Arg;
+
+description = ''' DESCRIBE ME integration service module - creates a war and jars for each of the environments'''
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'groovy'
+
+
+
+jar.enabled=true
+sourceCompatibility = 1.8
+configurations {  generate  }
+buildscript {
+
+
+   dependencies { 
+      classpath 'com.swacorp.tbs:gradle-environment-plugin:6.0.0'
+      classpath 'no.nils:wsdl2java:0.6'
+      classpath "com.swacorp.tbs:tbs-jaxb-plugin:${tbsVersion}"
+      classpath "com.sun.xml.bind:jaxb-xjc:${jaxbVersion}"
+      classpath "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
+      classpath "com.sun.xml.bind:jaxb-core:${jaxbVersion}"
+ 
+      classpath 'com.swacorp.tbs:gradle-environment-plugin:6.0.0'
+   }
+   sourceSets.main.java.srcDirs += "${buildDir}/environment/output/cargo"
+}
+
+repositories {
+	mavenLocal()
+}
+
+
+sourceSets {
+   main { java { srcDirs generatedSrcDir
+      } }
+}
+
+
+dependencies {
+
+//wiremock
+   compile "com.github.tomakehurst:wiremock:1.58"
+   compile "com.fasterxml.jackson.core:jackson-core:2.6.0",
+         "com.fasterxml.jackson.core:jackson-annotations:2.6.0",
+         "com.fasterxml.jackson.core:jackson-databind:2.6.0"
+   
+
+   generate "com.sun.xml.bind:jaxb-xjc:${jaxbVersion}"
+   generate "com.sun.xml.ws:jaxws-tools:${jaxwsVersion}"
+   // PUT YOUR CONTRACT PROJECT HERE LIKE THIS-> generate "com.swacorp.mx:mtx-people-idm-integration-contract:1.0-SNAPSHOT"
+   compile  'javax.ws.rs:javax.ws.rs-api:2.0.1'
+   //Service specific
+   compile 'com.thoughtworks.xstream:xstream:1.4.2'
+   // IF NEEDED PUT MXI CONTRACT PROJECT HERE LIKE THIS->generate "com.swacorp.mx.api.contract:mtx-api-contract:1.0.0-SNAPSHOT"
+   //TBS
+   runtime 'com.swacorp.aaf.utilities:swalog4j:2.0.0'
+   compile "com.swacorp.tbs:tbs-status-core:${tbsVersion}"
+   compile "com.swacorp.tbs:tbs-security-core:${tbsVersion}"
+   compile ("com.swacorp.tbs:tbs-security-ws-server:${tbsVersion}") { exclude (module: 'commons-io') }
+   runtime "com.swacorp.tbs:tbs-security-ws-client:${tbsVersion}"
+   runtime "com.swacorp.tbs:tbs-web-utilities:${tbsVersion}"
+   generate "com.swacorp.tbs:tbs-jaxb-plugin:${tbsVersion}"
+   //Spring
+   compile "org.springframework:spring-context:${springVersion}"
+   compile "org.springframework:spring-context-support:${springVersion}"
+   runtime "org.springframework:spring-web:${springVersion}"
+   runtime "org.springframework.batch:spring-batch-core:${springBatchVersion}"
+   runtime 'org.springframework:spring-tx:${springBatchVersion}'
+   
+  
+   compile "org.springframework:spring-oxm:${springVersion}"
+   compile "org.apache.cxf:cxf-rt-ws-security:${cxfVersion}"
+   compile "org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}"
+   
+   //log4j
+   runtime "org.slf4j:slf4j-log4j12:${slf4jVersion}"
+
+   //log4j
+   compile "log4j:log4j:${log4jVersion}"
+
+
+   //codahale - metrics
+   compile "io.dropwizard.metrics:metrics-annotation:${codahaleVersion}",
+         //swagger - publishing RESTful contract
+   compile ("com.wordnik:swagger-jaxrs_2.10:${swaggerVersion}") { exclude (module: 'jsr311-api') }
+   compile "com.wordnik:swagger-core_2.10:${swaggerVersion}"
+
+   runtime 'commons-io:commons-io:1.3.2'
+
+   //CXF
+   runtime "org.apache.cxf:cxf-rt-transports-http:${cxfVersion}"
+   compile "org.apache.ws.security:wss4j:1.6.19"
+   compile "org.springframework.integration:spring-integration-file:${springIntegrationVersion}"
+   
+   //Spring Integration - Orchastration of many integration endpoints with EIP
+   compile "org.springframework.integration:spring-integration-core:${springIntegrationVersion}"
+   //wiremock
+   compile "com.github.tomakehurst:wiremock:1.58"
+   compile "com.fasterxml.jackson.core:jackson-core:2.6.0",
+		   "com.fasterxml.jackson.core:jackson-annotations:2.6.0",
+		   "com.fasterxml.jackson.core:jackson-databind:2.6.0"
+   //log4j
+   compile "log4j:log4j:${log4jVersion}"
+   //log4j2
+   compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api', version: '2.4.1'
+   compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.4.1'
+   compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.4.1'
+   compile 'org.springframework.batch:spring-batch-integration:3.0.6.RELEASE'
+   compile 'net.sf.dozer:dozer:5.5.1'
+   compile 'net.sf.dozer:dozer-spring:5.5.1'
+   testCompile "org.spockframework:spock-core:1.0-groovy-2.3"
+   testCompile "org.spockframework:spock-spring:1.0-groovy-2.3"
+   testCompile "com.athaydes:spock-reports:1.2.5"
+   testCompile "org.codehaus.groovy:groovy-all:2.3.10"
+   testCompile "junit:junit:4.12"
+   testCompile "cglib:cglib-nodep:3.1"
+   testCompile "org.objenesis:objenesis:2.1"
+   testCompile "org.mockito:mockito-core:1.9.5"
+   testCompile "org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}"
+   testCompile	"org.springframework:spring-test:${springVersion}"
+  
+   // PUT YOUR CONTRACT PROJECT HERE LIKE THIS-> compile "com.swacorp.mx:mtx-people-idm-integration-contract:${idmIntegrationVersion}"
+   // IF NEEDED PUT MXI CONTRACT PROJECT HERE LIKE THIS->compile "com.swacorp.mx.api.contract:mtx-api-contract:${serviceContractVersion}"
+   
+
+}
+
+uploadArchives {
+	
+	   repositories.mavenDeployer {
+		  def nexusUser = System.getProperties().nexusUsername
+		  def nexusPassword = System.getProperties().nexusPassword
+		  def nexusServer = System.getProperties().nexusServer
+		  repository(url: nexusServer+"/content/repositories/CI/") {
+			 authentication(userName: nexusUser, password: nexusPassword)
+		  }
+		  snapshotRepository(url: nexusServer+"/content/repositories/snapshots/") {
+			 authentication(userName: nexusUser, password: nexusPassword)
+		  }
+		  pom.version = project.version
+		  pom.artifactId = project.name
+		  pom.groupId = project.group
+	   }
+	}
+	
+
+
+// Build Dependencies
+install.dependsOn build
+
+
+////////////////////////////////////  PLUGINS  ///////////////////////////////////////////
+
+
+apply plugin: 'apt-gradle-environment-plugin'
+	environmentGenerator { configurationDirectory = 'src/main/environment' }
+	processResources.dependsOn packageEnvironments
+// END plugin configuration
+	
+
+
+apply plugin: 'war'
+	war {
+		manifest {
+		   //Required for TBS Status to show Deployment details
+		   attributes("Artifact-Id": project.name, "Version": version, "Build-Timestamp": new Date(), "Group-Id": project.group, "Built-By": System.getProperty("user.name"),
+		   "Build-Jdk": System.getProperty("java.version"),
+		   "Tbs-Version": tbsVersion
+		   )
+		}
+	 }
+// END plugin configuration
+
+	
+	
+apply plugin: 'eclipse-wtp'
+	eclipse {
+	   classpath {
+	      downloadSources = true
+	      downloadJavadoc = false
+	   }
+	}
+// END plugin configuration 
+	
+	
+
+
+	// Create jococo test coverage reports.
+
+	jacocoTestReport.doFirst {
+	   group = "Reporting"
+	   description = "Generate Jacoco coverage reports after running tests."
+	
+	   classDirectories = fileTree(dir: 'build/classes/main', include: 'com/swacorp/**', excludes: [ 'com/mxi/xml/xsd/integration/**','com/mxi/maintenix/mxcorews/services/requestws/**','com/swacorp/mx/s2s/integration/**','com/swacorp/mx/s2s/out/integration/**'])
+	
+	}
+	
+	jacocoTestReport.dependsOn test
+	build.dependsOn jacocoTestReport
+
+
+	//Nothing configured for this plugin
+// END plugin configuration
+   
+   
+

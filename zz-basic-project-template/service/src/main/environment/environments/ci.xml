@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<environment>
+   <filesets>
+      <fileset>ci</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.ci</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

@@ -1,0 +1,8 @@
+<!-- 
+	log4j2 supports importing xml fragments.  
+	This file should have no root element and cannot contain anything that cannot be included in the <appenders> element. 
+	Testing shows that only 1 logger can be configured per fragment.
+-->	
+		<logger name="zz-SERVICE_LOGGER" additivity="false" level="${filter.logging.root.level}">
+			<AppenderRef ref="zz-SERVICE_APPENDER"  level="${filter.logging.root.level}"/>
+		</logger>

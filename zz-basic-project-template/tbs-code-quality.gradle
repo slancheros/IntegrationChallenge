@@ -1,0 +1,46 @@
+//code quality
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+
+//checkstyle
+checkstyle {
+   ignoreFailures = true
+   configFile rootProject.file("${rootDir}/config/code-quality/swa-checkstyle.xml")
+   //sourceSets = sourceSets { main { java { srcDirs } } }
+   checkstyleMain.source = "src/main/java"
+   checkstyleMain.exclude  '**/test/**'
+
+}
+
+//findbugs
+findbugs {
+   ignoreFailures = true
+   excludeFilter = new File("${rootDir}/config/code-quality/swa-findbugs.xml")
+   effort = "max"
+   reportLevel = "high"
+
+   sourceSets = sourceSets { main { java { srcDirs } } }
+   findbugsMain {
+      reports {
+        xml.enabled = false
+        html.enabled = true
+      }
+    }
+
+}
+
+//pmd
+pmd {
+   ignoreFailures = true
+   ruleSetFiles = files("${rootDir}/config/code-quality/swa-pmd.xml")
+
+   sourceSets = sourceSets { main { java { srcDirs } } }
+   pmdMain {
+      exclude 'com/mxi/maintenix/mxcorews/services/requestws/**'
+   }
+   tasks.withType(Pmd) {
+     reports.xml.enabled = true
+	  reports.html.enabled = true
+   }
+}

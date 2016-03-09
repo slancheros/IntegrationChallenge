@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>local</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.local</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

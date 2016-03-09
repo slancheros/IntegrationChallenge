@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>cargo</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.cargo</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

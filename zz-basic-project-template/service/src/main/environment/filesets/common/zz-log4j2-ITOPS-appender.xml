@@ -1,0 +1,16 @@
+<!-- log4j2 supports importing xml fragments. This file should have no root 
+	element and cannot contain anything that cannot be included in the <appenders> 
+	element. Testing shows that only 1 appender can be configured per fragment. -->
+
+<RollingFile name="zz-ITOPS_APPENDER"
+	fileName="$${sys:tomcat.alertLogFile}"
+	append="true"
+	filePattern="$${sys:tomcat.alertLogFile}">
+	<!-- FIXME: this pattern is not correct. there classes for this in the tbs-logging-utils 
+		jar -->
+	<PatternLayout pattern="[%d{yyyy/MM/dd} %d{HH:mm:ss.SSS}][High][${filter.componentGroup}][${filter.componentName}][$${sys:tomcat.host}][%m]%n" />
+	<Policies>
+		<SizeBasedTriggeringPolicy size="100 MB" />
+	</Policies>
+	<DefaultRolloverStrategy max="5" />
+</RollingFile>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+
+
+	<mapping wildcard="false" stop-on-errors="false" >
+		<class-a>com.swacorp.mx.sf.integration.domain.GateAssignment</class-a>
+		<class-b>com.swacorp.mx.sf.integration.domain.DataSAP</class-b>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.GIAInitConverter">
+			<a>operationalFlightLegKey.operatingCarrier</a>
+			<b>data</b>
+		</field>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.GIAFlightConverter">
+			<a>operationalFlightLegKey.scheduledFlightNumber</a>
+			<b>data</b>
+		</field>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.GIADateConverter">
+			<a>operationalFlightLegKey.scheduleDate</a>
+			<b>data</b>
+		</field>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.GIATailConverter">
+			<a>operationalFlightLegKey.tailNumber</a>
+			<b>data</b>
+		</field>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.GIAArrivalStationCodeConverter">
+			<a>operationalFlightLegKey.arrivalStationCode</a>
+			<b>data</b>
+		</field>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.GateConverter">
+			<a>arrivalGate</a>
+			<b>data</b>
+		</field>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.RequestIDConverter">
+			<a>eventInfo.requestId</a>
+			<b>data</b>
+		</field>
+		<field custom-converter="com.swacorp.mx.sf.integration.converters.EventIDConverter">
+			<a>eventInfo.eventId</a>
+			<b>data</b>
+		</field>
+	</mapping>
+
+
+</mappings> 

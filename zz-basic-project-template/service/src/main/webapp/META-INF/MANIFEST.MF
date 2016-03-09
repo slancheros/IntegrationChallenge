@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Group-Id: gradle-eclipse-workaround
+Artifact-Id: gradle-eclipse-workaround - these values will be replaced by command line build
+Version: gradle-eclipse-workaround
+Build-Timestamp: gradle-eclipse-workaround
+Built-By: gradle-eclipse-workaround
+Build-Jdk: gradle-eclipse-workaround

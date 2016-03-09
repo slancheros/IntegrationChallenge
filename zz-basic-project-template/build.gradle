@@ -1,0 +1,111 @@
+description = '''BASIC TBS FRAMEWORK TEMPLATE USED TO INIT NEW PROJECTS'''
+
+// Set the version suffix
+def versionSuffix
+if (hasProperty('versionSuffix')) {
+println 'has property'
+versionSuffix = property('versionSuffix')
+} else {
+println 'no property'
+versionSuffix = 'LOCAL'
+}
+
+
+buildscript {
+   ext {
+      archRepoUrl = 'https://nexus-tools.swacorp.com/ARCH/content/groups/public'
+	  mxRepoUrl = 'https://nexus-tools.swacorp.com/MX/content/groups/public'
+   }
+   repositories {
+	   mavenLocal()
+      maven { url archRepoUrl }
+	 
+   }
+   dependencies {
+      classpath 'net.researchgate:gradle-release:2.1.2'
+      //classpath 'org.codehaus.sonar.runner:sonar-runner-dist:2.3'
+      //classpath 'com.swacorp.gradle:promote-artifacts:1.8.4-48'
+      classpath 'com.swacorp.apt.gradle.plugins:code-quality-plugin:1.6.0-26'
+   
+   }
+}
+
+configure (allprojects) { project -> 
+   group = 'com.swacorp.mx'
+   version = "1.0.0" + "-" + versionSuffix
+   
+   repositories {
+      maven { url archRepoUrl
+	          url mxRepoUrl }
+	  
+   }
+   buildscript.repositories {
+      maven { url archRepoUrl }
+   }
+   
+   ext { 
+      generatedSrcDir = "$buildDir/generated-sources/xjc"
+      serviceContractVersion = "$serviceContractMajorVersion"+'.0.0-SNAPSHOT'
+	  // IF NEEDED PUT MXI CONTRACT PROJECT HERE LIKE THIS-> soapContractJar = "mtx-api-contract-${serviceContractVersion}.jar"
+	  // PUT YOUR CONTRACT PROJECT HERE LIKE THIS-> createUserSOAPContractJar="zz-basic-project-template-contract-1.0-SNAPSHOT.jar"
+	  contractJar="mtx-api-contract-1.0.0-SNAPSHOT.jar"  
+      springVersion = '4.1.4.RELEASE'
+      idmIntegrationVersion = '1.0-SNAPSHOT';
+      cxfVersion = '3.1.0'
+      slf4jVersion = '1.7.10'
+      jaxbVersion = '2.2.11'
+      junitVersion = '4.12'
+      jaxwsVersion = '2.2.10'
+      log4jVersion = '1.2.17'
+      codahaleVersion = '3.1.2'
+      swaggerVersion = '1.3.0'
+	  tbsVersion = "6.0.0"
+	  springIntegrationVersion = '4.1.2.RELEASE'
+	  springBatchVersion='3.0.6.RELEASE'
+	  log4j2Version='2.4.1'
+	  dozerVersion='5.5.1'
+   }
+
+}
+
+subprojects {
+   apply plugin: 'java'
+   apply plugin: 'maven'
+   apply plugin: 'apt-code-quality'
+   apply from: "${rootDir}/tbs-code-quality.gradle"
+   dependencies {
+      compile ("org.slf4j:slf4j-api:${slf4jVersion}")
+      testCompile ("junit:junit:${junitVersion}")
+   }
+}
+
+
+// Build Dependencies
+	project(':zz-basic-project-template-it') {
+		dependencies { compile project(':zz-basic-project-template-service') }
+	 }
+	 
+	defaultTasks 'clean', 'build', 'war'
+	
+
+////////////////////////////////////  PLUGINS  ///////////////////////////////////////////
+
+apply plugin: 'net.researchgate.release'
+	release {
+	   preCommitText = ''
+	   preTagCommitMessage = "[${jiraTicket}] - pre tag commit: "
+	   tagCommitMessage = "[${jiraTicket}] - creating tag: "
+	   newVersionCommitMessage = "[${jiraTicket}] - new version commit: "
+	   tagTemplate = '${version}'
+	   scmAdapters = [ net.researchgate.release.GitAdapter ]
+	   git {
+	     requireBranch = 'master'
+	     pushToRemote = 'origin'
+	     pushToCurrentBranch = false
+	   }
+	
+	}
+	afterReleaseBuild.dependsOn ':zz-basic-project-template-service:uploadArchives'
+// END plugin configuration
+	
+

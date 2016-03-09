@@ -1,0 +1,16 @@
+<!-- 
+	log4j2 supports importing xml fragments.  
+	This file should have no root element and cannot contain anything that cannot be included in the <appenders> element. 
+	Testing shows that only 1 appender can be configured per fragment.
+-->	
+		
+		<RollingFile  name="zz-SERVICE_APPENDER" fileName="${filter.log.base}/${filter.service.log.name}-service.$${sys:tomcat.host}.log" append="true" filePattern="${filter.log.base}/${filter.service.log.name}-service.$${sys:tomcat.host}.%d{yyyy-MM-dd}-%i.log">
+		 <PatternLayout pattern="%d{yyyy-MM-dd}T%d{HH:mm:ss.SSS} %-5p [%t] (%c) - %m%n"/>
+		  <Policies>
+			<SizeBasedTriggeringPolicy size="100 MB" />
+		  </Policies>
+			<DefaultRolloverStrategy max="5"/>
+		</RollingFile>
+		
+	
+

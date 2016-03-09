@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>pdc</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.pdc</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

@@ -1,0 +1,9 @@
+/build/
+/.gradle
+/.settings
+/.classpath
+/.project
+/it/.settings
+/it/test-output
+/it/.classpath
+/it/.project

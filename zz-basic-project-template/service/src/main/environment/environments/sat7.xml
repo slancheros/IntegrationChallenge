@@ -1,0 +1,10 @@
+<environment>
+   <filesets>
+      <fileset>sat7</fileset>
+      <fileset>common</fileset>
+   </filesets>
+   <patterns>
+      <pattern>*.sat7</pattern>
+      <pattern>*</pattern>
+   </patterns>
+</environment>

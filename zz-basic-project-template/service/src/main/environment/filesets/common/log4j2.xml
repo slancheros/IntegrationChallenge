@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns:xi="http://www.w3.org/2001/XInclude">
+  <Appenders>
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd}T%d{HH:mm:ss.SSS} %-5p [%l] - %m%n"/>
+		</Console>
+
+		<RollingFile name="ROOT_APPENDER" fileName="${filter.log.base}/${filter.framework.log.name}-framework.$${tomcat.host}.log" append="true" filePattern="${filter.log.base}/${filter.framework.log.name}-framework.$${tomcat.host}.%d{yyyy-MM-dd}-%i.log">
+		 <PatternLayout>
+			<Pattern>%d{yyyy-MM-dd}T%d{HH:mm:ss.SSS} %-5p [%t] (%c) - %m%n</Pattern>
+		  </PatternLayout>
+		  <Policies>
+			<SizeBasedTriggeringPolicy size="500 MB" />
+		  </Policies>
+			<DefaultRolloverStrategy max="5"/>
+		</RollingFile>
+  
+  
+		<xi:include href="zz-log4j2-SERVICE-appender.xml" />
+		<xi:include href="zz-log4j2-ITOPS-appender.xml" />
+		
+  </Appenders>
+
+  <loggers>
+  
+		<root level="${filter.logging.root.level}" additivity="false">
+			<AppenderRef ref="zz-SERVICE_APPENDER" />
+			<AppenderRef ref="CONSOLE" />
+		</root>
+  
+  
+		<xi:include href="zz-log4j2-SERVICE-logger.xml" />
+		<xi:include href="zz-log4j2-ITOPS-logger.xml" />
+	
+  </loggers>	
+</configuration>

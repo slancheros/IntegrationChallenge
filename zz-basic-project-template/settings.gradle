@@ -1,0 +1,6 @@
+rootProject.name = 'zz-basic-project-template'
+include ':zz-basic-project-template-service'
+include ':zz-basic-project-template-it'
+
+project(':zz-basic-project-template-service').projectDir = "$rootDir/service" as File
+project(':zz-basic-project-template-it').projectDir = "$rootDir/it" as File
