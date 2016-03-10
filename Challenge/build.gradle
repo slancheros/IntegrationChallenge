@@ -3,16 +3,19 @@ buildscript {
 		springBootVersion = '1.3.3.RELEASE'
 	}
 	repositories {
+		jcenter()
 		mavenCentral()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.6' 
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot' 
+apply plugin: 'com.github.jacobono.jaxb'
 apply plugin: "jacoco"
 //code quality
 apply plugin: 'checkstyle'
@@ -22,6 +25,7 @@ apply plugin: 'pmd'
 jar {
 	baseName = 'challenge'
 	version = '0.0.1-SNAPSHOT'
+	from "${buildDir}/classes/jaxb"
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -36,16 +40,58 @@ repositories {
       maven { url archRepoUrl }
 	 
    }
+   
 }
-
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
+	jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.7-b41'
+    jaxb 'com.sun.xml.bind:jaxb-impl:2.2.7-b41'
+    jaxb 'javax.xml.bind:jaxb-api:2.2.7'
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
+	testCompile "org.mockito:mockito-core:1.+"
+  	//testCompile("org.testng:testng")
 }
 
 defaultTasks 'clean', 'build', 'jar'
 
+// tag::wsdl[]
+task genJaxb {
+	ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
+	ext.classesDir = "${buildDir}/classes/com/swa/change/models"
+	ext.schema = "${projectDir}/src/main/resources/schema/unassignment.xsd"
+
+	outputs.dir classesDir
+
+	doLast() {
+		project.ant {
+			taskdef name: "xjc", classname: "com.sun.tools.xjc.XJCTask",
+					classpath: configurations.jaxb.asPath
+			mkdir(dir: sourcesDir)
+			mkdir(dir: classesDir)
+
+			xjc(destdir: sourcesDir, schema: schema) {
+				produces(dir: sourcesDir, includes: "**/*.java")
+			}
+
+			javac(destdir: classesDir, source: 1.8, target: 1.8, debug: true,
+					debugLevel: "lines,vars,source",
+					classpath: configurations.jaxb.asPath) {
+				src(path: sourcesDir)
+				include(name: "**/*.java")
+				include(name: "*.java")
+			}
+
+			copy(todir: classesDir) {
+				fileset(dir: sourcesDir, erroronmissingdir: false) {
+					exclude(name: "**/*.java")
+				}
+			}
+		}
+	}
+}
+// end::wsdl[]
+ 
 eclipse {
 	classpath {
 		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
@@ -54,8 +100,9 @@ eclipse {
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '2.9'
+	gradleVersion = '2.10'
 }
+
 
 jacoco {
     toolVersion = "0.7.1.201405082137"
@@ -68,6 +115,13 @@ jacocoTestReport {
         csv.enabled false
         html.destination "${buildDir}/reports/jacoco/html"
     }
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['com/swa/challenge/model/**', 'com/swa/challenge/util/**'])
+        })
+    }
+    
+    
 }
 
 test {
@@ -85,7 +139,7 @@ checkstyle {
    configFile rootProject.file("${rootDir}/config/code-quality/swa-checkstyle.xml")
    //sourceSets = sourceSets { main { java { srcDirs } } }
    checkstyleMain.source = "src/main/java"
-   checkstyleMain.exclude  '**/test/**'
+   checkstyleMain.exclude  '**/test/**', 'com/swa/challenge/model/**'
 }
 
 //findbugs
@@ -112,7 +166,7 @@ pmd {
 
    sourceSets = sourceSets { main { java { srcDirs } } }
    pmdMain {
-     // exclude 'com/mxi/maintenix/mxcorews/services/requestws/**'
+      exclude 'com/swa/challenge/model/**'
    }
    tasks.withType(Pmd) {
      reports.xml.enabled = true
