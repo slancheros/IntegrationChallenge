@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="GateAssignment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="EventInfo">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TopicCounts" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="TopicName" use="optional"/>
+                      <xs:attribute type="xs:byte" name="TopicCount" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="EventId"/>
+            <xs:attribute type="xs:string" name="CreationDatetime"/>
+            <xs:attribute type="xs:string" name="RequestId"/>
+            <xs:attribute type="xs:string" name="TopicName"/>
+            <xs:attribute type="xs:byte" name="TotalEventCount"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="OperationalFlightLegKey">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="MarketingFlights">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="MarketingCarrier"/>
+                      <xs:attribute type="xs:int" name="MarketingFlightNumber"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute type="xs:string" name="OperatingCarrier"/>
+            <xs:attribute type="xs:byte" name="ScheduledFlightNumber"/>
+            <xs:attribute type="xs:byte" name="FlightLegInstanceNumber"/>
+            <xs:attribute type="xs:string" name="ScheduleDate"/>
+            <xs:attribute type="xs:string" name="ScheduledDepartureDatetime"/>
+            <xs:attribute type="xs:string" name="ScheduledArrivalDatetime"/>
+            <xs:attribute type="xs:string" name="ScheduledDepartureStationCode"/>
+            <xs:attribute type="xs:string" name="ScheduledArrivalStationCode"/>
+            <xs:attribute type="xs:string" name="ArrivalStationCode"/>
+            <xs:attribute type="xs:string" name="ScheduledDepartureStationTimeZone"/>
+            <xs:attribute type="xs:string" name="ScheduledArrivalStationTimeZone"/>
+            <xs:attribute type="xs:string" name="ArrivalStationTimeZone"/>
+            <xs:attribute type="xs:string" name="FlightTypeCode"/>
+            <xs:attribute type="xs:string" name="FlightStateCode"/>
+            <xs:attribute type="xs:string" name="ForSale"/>
+            <xs:attribute type="xs:string" name="TailNumber"/>
+            <xs:attribute type="xs:string" name="NoseNumber"/>
+            <xs:attribute type="xs:string" name="EquipmentTypeCode"/>
+            <xs:attribute type="xs:short" name="Capacity"/>
+            <xs:attribute type="xs:byte" name="SchdDepCentralTzOffset"/>
+            <xs:attribute type="xs:byte" name="SchdDepStnTzOffset"/>
+            <xs:attribute type="xs:byte" name="SchdArrCentralTzOffset"/>
+            <xs:attribute type="xs:byte" name="SchdArrStnTzOffset"/>
+            <xs:attribute type="xs:string" name="WifiEquipt"/>
+            <xs:attribute type="xs:string" name="ScheduledMissionType"/>
+            <xs:attribute type="xs:string" name="ActualMissionType"/>
+            <xs:attribute type="xs:string" name="OperationType"/>
+            <xs:attribute type="xs:string" name="ScheduledEquipmentTypeCode"/>
+            <xs:attribute type="xs:string" name="ScheduledACV"/>
+            <xs:attribute type="xs:string" name="ACV"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ArrivalGateIdentifier">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:byte" name="OriginalGate"/>
+                <xs:attribute type="xs:byte" name="NewGate"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:byte" name="ArrivalGate"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

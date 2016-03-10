@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GateAssignment xmlns:ns2="http://com/swacorp/starr/mx/orderupdateasync/jaxbxml">
+	<EventInfo EventId="139921839" CreationDatetime="2015/07/20 14:06:28 935 GMT"
+		RequestId="28117902" TopicName="SWA.OPNL_SEG.FLT.GATE_ASGT"
+		TotalEventCount="2">
+		<TopicCounts TopicName="SWA.IATA.GATE.MVT" TopicCount="1" />
+		<TopicCounts TopicName="SWA.OPNL_SEG.FLT.GATE_ASGT"
+			TopicCount="1" />
+	</EventInfo>
+	<OperationalFlightLegKey OperatingCarrier="WN"
+		ScheduledFlightNumber="714" FlightLegInstanceNumber="0" ScheduleDate="20150720"
+		ScheduledDepartureDatetime="2015/07/20 11:00:00 GMT"
+		ScheduledArrivalDatetime="2015/07/20 12:05:00 GMT"
+		ScheduledDepartureStationCode="LBB" ScheduledArrivalStationCode="DAL"
+		ArrivalStationCode="DAL" ScheduledDepartureStationTimeZone="America/Chicago"
+		ScheduledArrivalStationTimeZone="America/Chicago"
+		ArrivalStationTimeZone="America/Chicago" FlightTypeCode="SCHEDULED"
+		FlightStateCode="NORMAL" ForSale="true" TailNumber="N614SW"
+		NoseNumber="N614" EquipmentTypeCode="73C" Capacity="143"
+		SchdDepCentralTzOffset="-5" SchdDepStnTzOffset="-5"
+		SchdArrCentralTzOffset="-5" SchdArrStnTzOffset="-5" WifiEquipt="false"
+		ScheduledMissionType="C1" ActualMissionType="C1" OperationType="Domestic"
+		ScheduledEquipmentTypeCode="735" ScheduledACV="Y122" ACV="Y143">
+		<MarketingFlights MarketingCarrier="WN"
+			MarketingFlightNumber="714" />
+	</OperationalFlightLegKey>
+	<ArrivalGateIdentifier OriginalGate="6" />
+</GateAssignment>

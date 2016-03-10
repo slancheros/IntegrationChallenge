@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<GateAssignment ArrivalGate="7"
+	xmlns:ns2="http://com/swacorp/starr/mx/orderupdateasync/jaxbxml">
+	<EventInfo EventId="139879277" CreationDatetime="2015/07/15 14:30:28 470 GMT"
+		RequestId="28105324" TopicName="SWA.OPNL_SEG.FLT.GATE_ASGT"
+		TotalEventCount="2">
+		<TopicCounts TopicName="SWA.IATA.GATE.MVT" TopicCount="1" />
+		<TopicCounts TopicName="SWA.OPNL_SEG.FLT.GATE_ASGT"
+			TopicCount="1" />
+	</EventInfo>
+	<OperationalFlightLegKey OperatingCarrier="WN"
+		ScheduledFlightNumber="3" FlightLegInstanceNumber="0" ScheduleDate="20150715"
+		ScheduledDepartureDatetime="2015/07/15 12:30:00 GMT"
+		ScheduledArrivalDatetime="2015/07/15 13:30:00 GMT"
+		ScheduledDepartureStationCode="HOU" ScheduledArrivalStationCode="DAL"
+		ArrivalStationCode="DAL" ScheduledDepartureStationTimeZone="America/Chicago"
+		ScheduledArrivalStationTimeZone="America/Chicago"
+		ArrivalStationTimeZone="America/Chicago" FlightTypeCode="SCHEDULED"
+		FlightStateCode="NORMAL" ForSale="true" TailNumber="N404WN"
+		NoseNumber="N404" EquipmentTypeCode="73W" Capacity="143"
+		SchdDepCentralTzOffset="-5" SchdDepStnTzOffset="-5"
+		SchdArrCentralTzOffset="-5" SchdArrStnTzOffset="-5" WifiEquipt="true"
+		ScheduledMissionType="C1" ActualMissionType="C1" OperationType="Domestic"
+		ScheduledEquipmentTypeCode="73W" ScheduledACV="Y143" ACV="Y143">
+		<MarketingFlights MarketingCarrier="WN"
+			MarketingFlightNumber="3" />
+	</OperationalFlightLegKey>
+	<ArrivalGateIdentifier NewGate="7" />
+</GateAssignment>

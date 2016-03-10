@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.swacorp.training.ClientDemoTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2016-02-22T21:43:40" hostname="PDCHPLD-VM10060" time="0.827">
+  <properties/>
+  <testcase name="clientDemo" classname="com.swacorp.training.ClientDemoTest" time="0.827"/>
+  <system-out><![CDATA[SUCCESSFUL
+
+]]></system-out>
+  <system-err><![CDATA[Feb 22, 2016 4:43:41 PM org.springframework.beans.factory.xml.XmlBeanDefinitionReader loadBeanDefinitions
+INFO: Loading XML bean definitions from class path resource [xml-bean-factory-config.xml]
+Feb 22, 2016 4:43:41 PM org.springframework.context.support.GenericXmlApplicationContext prepareRefresh
+INFO: Refreshing org.springframework.context.support.GenericXmlApplicationContext@253c4d26: startup date [Mon Feb 22 16:43:41 COT 2016]; root of context hierarchy
+ERROR StatusLogger No log4j2 configuration file found. Using default configuration: logging only errors to the console.
+]]></system-err>
+</testsuite>
