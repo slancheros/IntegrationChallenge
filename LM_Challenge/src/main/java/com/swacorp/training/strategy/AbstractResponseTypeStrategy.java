@@ -8,7 +8,9 @@
  * This software is the confidential and proprietary information of
  * Southwest Airlines, Co.
  */
-package com.swacorp.training;
+package com.swacorp.training.strategy;
+
+import com.swacorp.training.StrategyResult;
 
 public abstract class AbstractResponseTypeStrategy implements ResponseStrategy {
 
@@ -16,6 +18,7 @@ public abstract class AbstractResponseTypeStrategy implements ResponseStrategy {
    private String status;
 
    public AbstractResponseTypeStrategy(String status, String message) {
+	   System.out.println("Abstract inicializando por Abstracto.");
       this.message = message;
       this.status = status;
    }
@@ -36,14 +39,12 @@ public abstract class AbstractResponseTypeStrategy implements ResponseStrategy {
       this.status = status;
    }
 
-public StrategyResult decode() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-public boolean isImplementable() {
-	// TODO Auto-generated method stub
-	return false;
-}
+	public StrategyResult decode() {
+		return null;
+	}
+	
+	public boolean isImplementable() {
+		return false;
+	}
 
 }

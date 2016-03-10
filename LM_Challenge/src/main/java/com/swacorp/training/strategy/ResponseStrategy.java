@@ -8,7 +8,9 @@
  * This software is the confidential and proprietary information of
  * Southwest Airlines, Co.
  */
-package com.swacorp.training;
+package com.swacorp.training.strategy;
+
+import com.swacorp.training.StrategyResult;
 
 public interface ResponseStrategy {
    StrategyResult decode();

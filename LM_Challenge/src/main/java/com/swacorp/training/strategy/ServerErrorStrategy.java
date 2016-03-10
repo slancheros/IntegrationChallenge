@@ -8,15 +8,16 @@
  * This software is the confidential and proprietary information of
  * Southwest Airlines, Co.
  */
-package com.swacorp.training;
+package com.swacorp.training.strategy;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
+
+import com.swacorp.training.StrategyResult;
 
 public class ServerErrorStrategy extends AbstractResponseTypeStrategy {
 
-   private Logger log = LogManager.getLogger("im-ITOPS_APPENDER");
+	private static Logger log = Logger.getLogger(ServerErrorStrategy.class);
    private static final String ERROR_NOT_MESSAGE = "Could not send Message.";
    public static final String SERVER_ERROR = "EX_ERROR";
 
@@ -39,5 +40,4 @@ public class ServerErrorStrategy extends AbstractResponseTypeStrategy {
       return StringUtils.substringAfterLast(fline, ":").trim().equals(ERROR_NOT_MESSAGE)
             || fline.trim().equals(ERROR_NOT_MESSAGE) || getStatus().equals(SERVER_ERROR);
    }
-
 }

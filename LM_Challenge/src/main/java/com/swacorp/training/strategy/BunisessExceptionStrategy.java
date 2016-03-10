@@ -8,9 +8,11 @@
  * This software is the confidential and proprietary information of
  * Southwest Airlines, Co.
  */
-package com.swacorp.training;
+package com.swacorp.training.strategy;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.swacorp.training.StrategyResult;
 
 public class BunisessExceptionStrategy extends AbstractResponseTypeStrategy {
 
