@@ -17,7 +17,8 @@ import com.swacorp.mx.sf.integration.domain.DataSAP;
 import com.swacorp.mx.sf.integration.domain.GateAssignment;
 
 public class IntegrationLayerTransformationUtils {
-	
+	private IntegrationLayerTransformationUtils(){}
+	private static final String SEPARATOR = "&#xA;";
 	private static Mapper mapper;
 	
 	static{
@@ -52,7 +53,7 @@ public class IntegrationLayerTransformationUtils {
 	}
 	
 	private static void transformGIATag(StringBuffer transformedGateAssignment,GateAssignment gateAssignment) throws ParseException{
-		transformedGateAssignment.append("GIA&#xA;")
+		transformedGateAssignment.append("GIA"+SEPARATOR)
 		.append(gateAssignment.getOperationalFlightLegKey().getOperatingCarrier())
 		.append(gateAssignment.getOperationalFlightLegKey().getScheduledFlightNumber())
 		.append("/")
@@ -63,25 +64,25 @@ public class IntegrationLayerTransformationUtils {
 		.append(gateAssignment.getOperationalFlightLegKey().getTailNumber())
 		.append(".")
 		.append(gateAssignment.getOperationalFlightLegKey().getArrivalStationCode())
-		.append("&#xA;");
+		.append(SEPARATOR);
 	}
 	
 	private static void transformGATETag(StringBuffer transformedGateAssignment,GateAssignment gateAssignment) throws ParseException{
 		transformedGateAssignment.append("GTE ");
-		String gate = (gateAssignment.getArrivalGate() == null || 
-				gateAssignment.getArrivalGate().isEmpty()) ? "XXXXX" : gateAssignment.getArrivalGate();
+		String gate = gateAssignment.getArrivalGate() == null || 
+				gateAssignment.getArrivalGate().isEmpty() ? "XXXXX" : gateAssignment.getArrivalGate();
 		transformedGateAssignment.append(gate)
-		.append("&#xA;");		
+		.append(SEPARATOR);		
 	}
 	private static void transformRequestTag(StringBuffer transformedGateAssignment,GateAssignment gateAssignment) throws ParseException{
 		transformedGateAssignment.append("SI Request_ID=");
 		transformedGateAssignment.append(gateAssignment.getEventInfo().getRequestId())
-		.append("&#xA;");		
+		.append(SEPARATOR);		
 	}
 	private static void transformEventTag(StringBuffer transformedGateAssignment,GateAssignment gateAssignment) throws ParseException{
 		transformedGateAssignment.append("SI Event_ID=");
 		transformedGateAssignment.append(gateAssignment.getEventInfo().getEventId())
-		.append("&#xA;");		
+		.append(SEPARATOR);		
 	}
 	
 	public static String transformDateFormatUppercase(String inputFormat,String outputFormat,String date) throws ParseException{

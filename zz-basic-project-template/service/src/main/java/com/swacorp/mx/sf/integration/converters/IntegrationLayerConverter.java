@@ -4,7 +4,7 @@ import org.dozer.CustomConverter;
 
 public abstract class IntegrationLayerConverter  implements CustomConverter {
 
-	protected boolean validateNull = true;
+	private boolean validateNull = true;
 	
 	@Override
 	public Object convert(Object existingDestinationFieldValue, Object sourceFieldValue, Class<?> destinationClass,
@@ -16,7 +16,13 @@ public abstract class IntegrationLayerConverter  implements CustomConverter {
 	}
 	
 	
-	
+
+	protected void setValidateNull(boolean validateNull) {
+		this.validateNull = validateNull;
+	}
+
+
+
 	protected abstract Object transformation(Object existingDestinationFieldValue, Object sourceFieldValue);
 
 }

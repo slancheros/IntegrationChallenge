@@ -4,7 +4,7 @@ public class GateConverter extends IntegrationLayerConverter {
 	
 	public GateConverter() {
 		super();
-		this.validateNull = false;
+		setValidateNull(false);
 	}
 		
 	@Override

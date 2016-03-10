@@ -25,11 +25,11 @@ public class ReadFilesFromDirectoryTest {
 		assertEquals(files.length, 0);
 	}
 	
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void readAllFilesFromNonDirectory(){
 		String directoryPath = RESOURCE_DIRECTORY+"dozer-mapping.xml";
 		File[]files = IntegrationLayerFileUtils.getXmlFileFromDirectory(directoryPath);
-		
+		assertNull(files);
 	}
 	
 	@Test

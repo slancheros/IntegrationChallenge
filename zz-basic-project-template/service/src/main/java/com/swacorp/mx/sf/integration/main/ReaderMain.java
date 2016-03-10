@@ -31,7 +31,7 @@ public class ReaderMain {
 		}
 		for(GateAssignment gate : gates){
 			IntegrationLayerFileUtils.appendDataToFile(RESOURCE_DIRECTORY, "IATA", 
-					IntegrationLayerTransformationUtils.transformGateAssignmentToSAPFormat(gate));
+					IntegrationLayerTransformationUtils.convertGateAssignmentToSAPWithDozer(gate).getData());
 		}
 	}
 

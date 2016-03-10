@@ -11,17 +11,13 @@ import org.apache.logging.log4j.Logger;
 
 public class IntegrationLayerFileUtils {
 	
+	private IntegrationLayerFileUtils(){}
+	
 	private static final Logger  LOG = LogManager.getLogger(IntegrationLayerFileUtils.class);
 	
 	public static File[] getXmlFileFromDirectory(String fileDirectory){
-		File directory = new File(fileDirectory);
-		try
-		{
+			File directory = new File(fileDirectory);
 			return directory.listFiles((File pathname) -> pathname.getName().toLowerCase().endsWith("xml"));
-		}catch(NullPointerException ex){
-			LOG.error("Error reading the directory: "+fileDirectory,ex);
-		}
-		return null;
 	}
 	
 	public static void appendDataToFile(String filePath,String fileName, String data) throws IOException{
@@ -30,6 +26,6 @@ public class IntegrationLayerFileUtils {
 		if(!directory.exists()){
 			directory.createNewFile();
 		}
-		java.nio.file.Files.write(Paths.get(filePath+fileName), data.getBytes(), StandardOpenOption.APPEND);
+		java.nio.file.Files.write(Paths.get(filePath+fileName), data.getBytes("UTF-8"), StandardOpenOption.APPEND);
 	}
 }

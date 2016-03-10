@@ -199,17 +199,7 @@ apply plugin: 'com.bmuschko.cargo'
 		println file
 		}
 	}
-   
-   task overrideSecurityUrl(type: com.bmuschko.gradle.cargo.tasks.local.CargoStartLocal) {
-      def javaSystemProperties = System.getProperties()
-      def securityServiceURL = null
-      if (environmentName == 'ci') {  //Use the mock security service url if env is 'ci' for Cargo (service module)
-         systemProperties = [
-            'security.service.url' : "http://localhost:5555/v3/SecurityService/security"
-         ]
-      }
-   }
-   
+      
 	test.dependsOn cargoStartLocal
 	test.finalizedBy cargoStopLocal
 	cargoStartLocal.dependsOn(':zz-basic-project-template-service:war', createCargoHome)
