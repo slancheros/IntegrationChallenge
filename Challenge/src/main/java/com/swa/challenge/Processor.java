@@ -52,11 +52,11 @@ public class Processor {
         result.append(Constants.X_A);
         result.append(Constants.GTE_7);
         result.append(Constants.X_A);
-        result.append(Constants._SI);
+        result.append(Constants.SI);
         result.append(Constants.REQUEST_ID);
         result.append(assignment.getEventInfo().getRequestId());
         result.append(Constants.X_A);
-        result.append(Constants._SI);
+        result.append(Constants.SI);
         result.append(Constants.EVENT_ID);
         result.append(assignment.getEventInfo().getEventId());
         result.append(Constants.X_A);

@@ -3,7 +3,10 @@ package com.swa.challenge.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ProcessorUtils {
+public final class ProcessorUtils {
+
+    private ProcessorUtils() {
+    }
 
     public static String getArrivalDate(String arrivalDate, StringBuilder result) throws Exception {
         Date date = null;
